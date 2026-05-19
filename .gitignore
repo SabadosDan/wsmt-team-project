@@ -1,0 +1,22 @@
+# build output
+target/
+*.class
+
+# IDE
+.idea/
+*.iml
+.vscode/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# logs and runtime
+*.log
+*.pid
+
+# local overrides
+docker-compose.override.yml
+.env
+.env.local
