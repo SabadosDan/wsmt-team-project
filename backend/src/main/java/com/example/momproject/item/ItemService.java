@@ -27,9 +27,7 @@ public class ItemService {
     }
 
     public Item create(Item item) {
-        if (item.getCreatedAt() == null) {
-            item.setCreatedAt(Instant.now());
-        }
+        item.setCreatedAt(Instant.now());
         Item saved = repository.save(item);
         publisher.publish(ItemEvent.created(saved));
         return saved;

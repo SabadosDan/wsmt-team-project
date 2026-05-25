@@ -1,7 +1,9 @@
 package com.example.momproject.item;
 
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
@@ -30,13 +32,15 @@ public class ItemController {
     }
 
     @PostMapping
-    public ResponseEntity<Item> create(@RequestBody Item item) {
+    public ResponseEntity<Item> create(@Valid @RequestBody Item item) {
         Item saved = service.create(item);
-        return ResponseEntity.created(URI.create("/api/items/" + saved.getId())).body(saved);
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{id}").buildAndExpand(saved.getId()).toUri();
+        return ResponseEntity.created(location).body(saved);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Item> update(@PathVariable String id, @RequestBody Item item) {
+    public ResponseEntity<Item> update(@PathVariable String id, @Valid @RequestBody Item item) {
         return service.update(id, item)
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());

@@ -1,5 +1,7 @@
 package com.example.momproject.config;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.Queue;
@@ -14,6 +16,9 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class RabbitConfig {
+
+    private static final Logger log = LoggerFactory.getLogger(RabbitConfig.class);
+
 
     public static final String EXCHANGE = "items.exchange";
     public static final String QUEUE = "items.queue";
@@ -45,6 +50,8 @@ public class RabbitConfig {
         RabbitTemplate t = new RabbitTemplate(cf);
         t.setMessageConverter(mc);
         t.setMandatory(true);
+        t.setReturnsCallback(r -> log.warn("message returned unroutable: exchange={} routingKey={} replyText={}",
+                r.getExchange(), r.getRoutingKey(), r.getReplyText()));
         return t;
     }
 }

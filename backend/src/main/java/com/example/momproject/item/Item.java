@@ -1,5 +1,8 @@
 package com.example.momproject.item;
 
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -10,19 +13,20 @@ public class Item {
 
     @Id
     private String id;
+
+    @NotBlank(message = "name is required")
     private String name;
+
     private String description;
+
+    @NotNull(message = "quantity is required")
+    @Min(value = 0, message = "quantity must be >= 0")
     private Integer quantity;
+
     private Instant createdAt;
 
     public Item() {}
 
-    public Item(String name, String description, Integer quantity) {
-        this.name = name;
-        this.description = description;
-        this.quantity = quantity;
-        this.createdAt = Instant.now();
-    }
 
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }
