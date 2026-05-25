@@ -87,22 +87,17 @@ Once started:
 - Actuator health: `http://localhost:8080/actuator/health`
 - RabbitMQ management UI: `http://localhost:15672` (login `admin` / `admin`)
 
-### Run the client
+### Open the client
 
-Open `client/index.html` directly in a browser, or serve it with:
-
-```
-python -m http.server 8000
-```
-
-from the `client/` folder and visit `http://localhost:8000`.
+Once the backend is running, open `http://localhost:8080` in a browser.
+The UI is served directly by Spring Boot from `src/main/resources/static/index.html`.
 
 ## Requirements mapping
 
 | Requirement | How we satisfy it |
 |-------------|-------------------|
 | Web services technology (REST) for client-server communication | `ItemController` exposes `/api/items` with Spring MVC, JSON over HTTP. |
-| Client UI with CRUD operations | `client/index.html`, vanilla form + table, `fetch()` calls per operation. |
+| Client UI with CRUD operations | `src/main/resources/static/index.html`, vanilla form + table, `fetch()` calls per operation. |
 | MOM load balancing across multiple servers (>=2 nodes) | RabbitMQ cluster config in `docker/rabbitmq/` with HAProxy round-robin (see `docker/haproxy/haproxy.cfg`). |
 | MOM failover | Quorum queue replicates the log across nodes (Raft); HAProxy health checks drop dead nodes within 5s. |
 | Message persistence | `durable: true` queue, publisher sets `MessageDeliveryMode.PERSISTENT`. |
